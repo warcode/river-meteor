@@ -23,13 +23,38 @@ if (Meteor.isClient) {
 		tweets: function () {
 			return Tweets.find({}, {sort: {created_at: -1}});
 		}
-	}); 
+	});
+	
+	Template.menubox.events({
+      'click .river-login-button' : function() {
+        Meteor.loginWithTwitter({ loginStyle: "redirect" });
+      }
+    });
+	
+	/*
+    Template.user.events({
+      'click #signOut' : function() {
+        Meteor.logout();
+      }
+    });
+    */
   
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+	
+	Accounts.loginServiceConfiguration.remove({
+		service : 'twitter'
+	});
+
+	Accounts.loginServiceConfiguration.insert({
+		service     : 'twitter',
+		consumerKey : Meteor.settings.twitter.key,
+		secret      : Meteor.settings.twitter.secret
+	});
+    
     Tweets.remove({});
     Tweets.insert({
 		river_user: 'warcode', 

@@ -8,7 +8,9 @@
     <body>
         <div id="main">
             <div id="river">
-            {{> loginButtons}}
+            {{#if currentUser}}
+                {{currentUser.services.twitter.screenName}}
+            {{/if}}
             {{> menubox}}
             {{> msgbox}}
             <div id="stream">
@@ -35,9 +37,7 @@
                 <a href="#">LAST READ</a>
             </div>
             <div id="twitter_signin" class="river-login">
-                <a href="#" onclick="River.OAuth();">
-                    <img src="img/sign-in-with-twitter-gray.png" alt="Sign in with Twitter">
-                </a>
+                <input class="river-login-button" type="button" id="river-login-click" style="background:url(img/sign-in-with-twitter-gray.png) no-repeat; width: 100%; height: 100%; border: none;"/>
             </div>
         </div>
 </div>
