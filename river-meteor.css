@@ -1,1 +1,326 @@
-/* CSS declarations go here */
+html {
+    height: 99%;
+}
+
+body{
+    font-family: 'PT Sans', sans-serif;
+    font-size: 150%;
+    color:#C0C0C0;
+    margin: 0;
+    background-color: #33b5e5;
+}
+
+div#main {
+    height: 100%;
+}
+
+div#river {
+    height: 100%;
+}
+
+.res-768 {
+    font-size: 123%;
+}
+.res-800 {
+    font-size: 123%;
+}
+.res-1280 {
+    font-size: 116%;
+}
+
+.res-1680 {
+    font-size: 106%;
+}
+
+.res-1920 {
+}
+
+.res-max {
+}
+
+
+div#river {
+    width: 100%;
+    background-color: #121417;
+}
+
+div#menubox {
+    width: 100%;
+    height: 80px;
+    background: #252a30;
+    border-bottom: 1px solid #222;
+}
+
+div.control-box {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 1000px;
+    width: 1000px;
+    height: inherit;
+}
+
+div.write-button {
+    position:absolute;
+    top: 45px;
+    left: 467px;
+    width: auto;
+    background: #252a30;
+    /*border: solid 2px #121417;*/
+    text-align: center;
+    z-index: 15;
+}
+
+div.last-read-button {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 5px;
+    width: auto;
+    background: #252a30;
+    z-index: 15;
+}
+
+div.river-login {
+    position: absolute;
+    left: 421px;
+    top: 45px;
+    width: 158px;
+    height: 29px;
+    z-index: 16;
+}
+
+div#msgbox {
+    position: relative;
+    top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 1000px;
+    width: 1000px;
+    border-bottom: 2px dashed rgb(37, 42, 48);
+    height: 96px;
+}
+
+div#msgbox fieldset {
+    position: absolute;
+    left: 70px;
+    height: 96px !important;
+    width: 700px;
+    top: 30px;
+}
+
+div#msgbox textarea {
+    height: 50px;
+    background: none repeat scroll 0% 0% #121417;
+    border: 0px none;
+    color: #C0C0C0;
+    top: 10px;
+    width: 781px;
+}
+
+.msgbox-username {
+    position: absolute;
+    left: 83px;
+    top: 6px;
+    font-size: 70%;
+    width: auto;
+    font-family: 'PT Sans',sans-serif;
+    color: #C0C0C0;
+}
+
+.msgbox-sendbutton {
+    color: #33B5E5;
+    text-decoration: none;
+    width: auto;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 155%;
+}
+
+div#stream {
+    position: relative;
+    top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 1000px;
+    width: 1000px;
+    min-height: 1000px;
+    position: relative;
+    text-align: justify;
+    background: #121417;
+}
+
+.content {
+    display: block;
+    height: 100%;
+}
+
+.tweet:hover .timeago {
+    opacity: 1.0;
+}
+
+.tweet:hover .control {
+     display: block;
+}
+
+.control {
+    clear: both;
+    display: none;
+    position: absolute;
+    font-size: 50%
+}
+
+.open {
+    top: 3px;
+    right: 6px;
+}
+
+.reply {
+    top: 16px;
+    right: 6px;
+}
+
+
+.tweet {
+    /*border-bottom: solid 1px #33b5e5;*/
+    border-bottom: dashed 2px #252a30;
+    height: 96px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.retweet {
+    /*background: #252a30 !important;*/
+}
+
+.mention {
+    background: #252a30 !important;
+}
+
+.user {
+    position: absolute;
+    left: 83px;
+    top: 6px;
+    font-size: 70%;
+    width: auto;
+    /*border: solid 1px red;*/
+}
+
+.user-retweet {
+    position: absolute;
+    top: 5px;
+    left: 81px;
+    font-size: 70%;
+    width: auto;
+    /*border: solid 1px red;*/  
+}
+.avatar {
+    float: left;
+    position: absolute;
+    left: 10px;
+    top: 14px;
+    width: 48px;
+    height: 48px;
+    box-shadow: 0px 0px 20px #33b5e5;
+}
+
+.retweeter {
+    float: left;
+    position: absolute;
+    left: 40px;
+    top: 49px;
+    width: 25px;
+    height: 25px;
+    z-index: 5;
+    border: solid 1px black;
+    box-shadow: 0px 0px 5px #33b5e5;
+}
+
+.message {
+    clear: both;
+    position: absolute;
+    width: 800px;
+    left: 83px;
+    top: 38px;
+    font-size: 70%;
+    text-align: left;
+    /*border: solid 1px red;*/
+}
+
+.timeago {
+    clear: both;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 50%;
+    opacity: 0.15;
+}
+
+.last-unread {
+    border-bottom: solid 1px #33b5e5;
+}
+
+
+fieldset {
+    border: none;
+}
+
+textarea {
+    resize: none;
+}
+
+.characters {
+    position: relative;
+    text-align: right;
+    bottom: 40px;
+    left: 737px;
+    width: 40px;
+}
+
+.send-button {
+    position: absolute;
+    bottom: 63px;
+    left: 728px;
+    width: 80px;
+    line-height: 15px;
+    padding: 5px 0;
+    border: 1px solid #888;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -webkit-transform: rotate(-91deg);
+}
+
+.magical {
+    margin-top: 100px;
+}
+
+.hidden {
+    display: none;
+}
+
+.deleted {
+    text-decoration: line-through;
+}
+
+a {
+    color: #33b5e5;
+    text-decoration: none;
+}
+
+.embedContainer {
+    position: absolute;
+    left: 90px;
+    border-radius: 5px;
+    bottom: 20px;
+    overflow: hidden;
+    height: 253px;
+    width: 550px;
+    box-shadow: 0 0 10px #33b5e5;
+}
+
+.embedImage {
+    width: 100%;
+    margin-top: -25%;
+}

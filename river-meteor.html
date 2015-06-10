@@ -1,14 +1,88 @@
-<head>
-  <title>river-meteor</title>
-</head>
+    <head>
+    <meta charset="utf-8">
+    <title>RIVER</title>
+    <link rel="icon" type="image/png" href="https://deny.io/river/river.png">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans|Oleo+Script:400,700|PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
 
-<body>
-  <h1>Welcome to Meteor!</h1>
+    </head>
+    <body>
+        <div id="main">
+            <div id="river">
+            {{> loginButtons}}
+            {{> menubox}}
+            {{> msgbox}}
+            <div id="stream">
+                {{#each tweets}}
+                    {{#if isRetweet}}
+                        {{> retweet}}
+                    {{else}}
+                        {{> tweet}}
+                    {{/if}}
+                {{/each}}
+            </div>
+            </div>
+        </div>
+    </body>
 
-  {{> hello}}
-</body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="menubox">
+<div id="menubox">
+    <div id="control-container" class="control-box">
+        <div id="write-control" class="write-button">
+            <a href="#">WRITE</a>
+            </div>
+            <div id="last-read-control" class="last-read-button">
+                <a href="#">LAST READ</a>
+            </div>
+            <div id="twitter_signin" class="river-login">
+                <a href="#" onclick="River.OAuth();">
+                    <img src="img/sign-in-with-twitter-gray.png" alt="Sign in with Twitter">
+                </a>
+            </div>
+        </div>
+</div>
+</template>
+
+<template name="msgbox">
+<div id="msgbox" class="hidden">
+    <div class="msgbox-username">You (@username)</div>
+        <fieldset>
+            <textarea name="status" id="status" rows="5" cols="40" class="" placeholder="Click here to write your message." autocomplete="off"></textarea>
+            <div class="characters">140</div>
+        </fieldset>
+        <div class="msgbox-sendbutton">
+        <a href="#" onclick="River.Tweet.Send();">SEND</a>
+    </div>
+</div>
+</template>
+
+
+
+
+<template name="tweet">
+    
+<div id="{{twitter_data.id_str}}" class="tweet">
+    <div id="content" class="content">
+        <img class="avatar" src="{{twitter_data.user.profile_image_url_https}}"/>
+        <div class="user">
+            {{twitter_data.user.name}} (<a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>)
+        </div>
+        <div class="message">
+            {{twitter_data.text}}
+        </div>
+    </div>
+    <div>
+        <a href="https://twitter.com/{{twitter_data.user.screen_name}}/status/{{twitter_data.id_str}}" target="_blank" class="control open">open</a>
+        <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
+        <abbr class="timeago" title="{{twitter_data.created_at}}" data-livestamp="{{twitter_data.created_at}}"></abbr>
+    </div>
+</div>
+</template>
+
+<template name="tweet-with-image">
+  <li>{{text}}</li>
+</template>                    
+
+<template name="retweet">
+  <li>{{text}}</li>
 </template>
