@@ -4,13 +4,13 @@
     <link rel="icon" type="image/png" href="https://deny.io/river/river.png">
     <link href='https://fonts.googleapis.com/css?family=PT+Sans|Oleo+Script:400,700|PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
 
+    <script>
+        moment().format();
+    </script>
     </head>
     <body>
         <div id="main">
             <div id="river">
-            {{#if currentUser}}
-                {{currentUser.services.twitter.screenName}}
-            {{/if}}
             {{> menubox}}
             {{> msgbox}}
             <div id="stream">
@@ -30,15 +30,22 @@
 <template name="menubox">
 <div id="menubox">
     <div id="control-container" class="control-box">
+            {{#if currentUser}}
+                @{{currentUser.services.twitter.screenName}}
+                {{currentUser.services.twitter.oauth_access_token}}
+                {{currentUser.services.twitter.oauth_access_token_secret}}
+            {{/if}}
         <div id="write-control" class="write-button">
             <a href="#">WRITE</a>
             </div>
             <div id="last-read-control" class="last-read-button">
                 <a href="#">LAST READ</a>
             </div>
-            <div id="twitter_signin" class="river-login">
-                <input class="river-login-button" type="button" id="river-login-click" style="background:url(img/sign-in-with-twitter-gray.png) no-repeat; width: 100%; height: 100%; border: none;"/>
-            </div>
+            {{#unless currentUser}}
+                <div id="twitter_signin" class="river-login">
+                    <input class="river-login-button" type="button" id="river-login-click" style="background:url(img/sign-in-with-twitter-gray.png) no-repeat; width: 100%; height: 100%; border: none;"/>
+                </div>
+            {{/unless}}
         </div>
 </div>
 </template>
@@ -57,8 +64,6 @@
 </template>
 
 
-
-
 <template name="tweet">
     
 <div id="{{twitter_data.id_str}}" class="tweet">
@@ -74,14 +79,16 @@
     <div>
         <a href="https://twitter.com/{{twitter_data.user.screen_name}}/status/{{twitter_data.id_str}}" target="_blank" class="control open">open</a>
         <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
-        <abbr class="timeago" title="{{twitter_data.created_at}}" data-livestamp="{{twitter_data.created_at}}"></abbr>
+        <abbr class="timeago" title="{{formatTwitterDate}}" data-livestamp="{{formatTwitterTimestamp}}"></abbr>
     </div>
 </div>
 </template>
 
+
 <template name="tweet-with-image">
   <li>{{text}}</li>
 </template>                    
+
 
 <template name="retweet">
   <li>{{text}}</li>

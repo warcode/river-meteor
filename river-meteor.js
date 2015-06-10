@@ -1,27 +1,27 @@
 Tweets = new Mongo.Collection("tweets");
 
 if (Meteor.isClient) {
-  // counter starts at 0
-  /*
-  Session.setDefault('counter', 0);
-
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
-  */
+	
+	moment().format();
   
 	Template.body.helpers({
 		tweets: function () {
-			return Tweets.find({}, {sort: {created_at: -1}});
+			if(Tweets.find({river_user: this.userId}).count() == 0) {
+				Meteor.call('Timeline', function(err, response) {});
+			}
+			return Tweets.find({river_user: this.userId}, {sort: {created_at: -1}});
+		}
+	});
+	
+	Template.tweet.helpers({
+		formatTwitterDate: function () {
+			return moment(this.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("ddd MMM DD HH:mm:ss YYYY");
+		}
+	});
+	
+	Template.tweet.helpers({
+		formatTwitterTimestamp: function () {
+			return moment(this.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("X");
 		}
 	});
 	
@@ -42,6 +42,7 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+	 
   Meteor.startup(function () {
     // code to run on server at startup
 	
@@ -56,18 +57,50 @@ if (Meteor.isServer) {
 	});
     
     Tweets.remove({});
-    Tweets.insert({
-		river_user: 'warcode', 
-		twitter_data : { 
-			id_str : '1234',
-			user : {
-				name : '',
-				screen_name : '',
-				profile_image_url_https : ''
-			},
-			text : 'hello',
-			created_at : '2015-01-01'
-		}
-	});
+	
   });
+  
+  Meteor.methods({
+	Timeline : function() {
+		if(Meteor.user().services.twitter && Tweets.find({river_user: this.userId}).count() == 0)
+		{
+			twitterClient = new TwitMaker({
+				consumer_key: Meteor.settings.twitter.key,
+				consumer_secret: Meteor.settings.twitter.secret,
+				access_token: Meteor.users.findOne({_id:Meteor.userId()}).services.twitter.accessToken,
+				access_token_secret: Meteor.users.findOne({_id:Meteor.userId()}).services.twitter.accessTokenSecret
+			});
+			
+			
+			twitterClient.get('statuses/home_timeline', { count : 50}, Meteor.bindEnvironment(function(err, data, resp) {
+					if (err) {
+						console.log(err);
+					}
+					if(data) {
+							data.forEach(function(element, index, array) {
+								Tweets.insert({
+									river_user: this.userId,
+									twitter_data : {
+										id_str : element.id_str,
+										user : {
+											name : element.user.name,
+											screen_name : element.user.screen_name,
+											profile_image_url_https : element.user.profile_image_url_https
+										},
+										text : element.text,
+										created_at : element.created_at
+									}
+								});
+							});
+						
+					}
+					//store.set(user_token, data, 'EX', 60, redis.print);
+			}));		
+		}
+		else
+		{
+			console.log('tweets already found');
+		}
+	}
+	});
 }
