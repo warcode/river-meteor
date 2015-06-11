@@ -15,13 +15,13 @@ if (Meteor.isClient) {
 	
 	Template.tweet.helpers({
 		formatTwitterDate: function () {
-			return moment(this.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("ddd MMM DD HH:mm:ss YYYY");
-		}
-	});
-	
-	Template.tweet.helpers({
+			return moment(this.twitter_data.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("ddd MMM DD HH:mm:ss YYYY");
+		},
 		formatTwitterTimestamp: function () {
-			return moment(this.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("X");
+			return moment(this.twitter_data.created_at, "ddd MMM DD HH:mm:ss ZZ YYYY").format("X");
+		},
+		autolinkTwitterMessage: function () {
+			return twttr.txt.autoLink(this.twitter_data.text, { urlEntities: this.twitter_data.entities.urls });
 		}
 	});
 	
@@ -88,7 +88,10 @@ if (Meteor.isServer) {
 											profile_image_url_https : element.user.profile_image_url_https
 										},
 										text : element.text,
-										created_at : element.created_at
+										created_at : element.created_at,
+										entities : {
+											urls: element.entities.urls
+										}
 									}
 								});
 							});

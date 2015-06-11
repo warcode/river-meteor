@@ -32,8 +32,6 @@
     <div id="control-container" class="control-box">
             {{#if currentUser}}
                 @{{currentUser.services.twitter.screenName}}
-                {{currentUser.services.twitter.oauth_access_token}}
-                {{currentUser.services.twitter.oauth_access_token_secret}}
             {{/if}}
         <div id="write-control" class="write-button">
             <a href="#">WRITE</a>
@@ -73,7 +71,7 @@
             {{twitter_data.user.name}} (<a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>)
         </div>
         <div class="message">
-            {{twitter_data.text}}
+            {{{autolinkTwitterMessage}}}
         </div>
     </div>
     <div>
