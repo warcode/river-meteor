@@ -191,6 +191,10 @@ div#stream {
     overflow: hidden;
 }
 
+.tweet.embedded {
+	min-height: 370px;
+}
+
 .retweet {
     /*background: #252a30 !important;*/
 }

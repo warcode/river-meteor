@@ -30,11 +30,13 @@
 <template name="menubox">
 <div id="menubox">
     <div id="control-container" class="control-box">
+        <div style="display:none">
             {{#if currentUser}}
                 @{{currentUser.services.twitter.screenName}}
             {{/if}}
+        </div>
         <div id="write-control" class="write-button">
-            <a href="#">WRITE</a>
+            <a id="write-link" href="#">WRITE</a>
             </div>
             <div id="last-read-control" class="last-read-button">
                 <a href="#">LAST READ</a>
@@ -50,27 +52,33 @@
 
 <template name="msgbox">
 <div id="msgbox" class="hidden">
-    <div class="msgbox-username">You (@username)</div>
+    <div class="msgbox-username">{{currentUser.profile.name}} (@{{currentUser.services.twitter.screenName}})</div>
         <fieldset>
             <textarea name="status" id="status" rows="5" cols="40" class="" placeholder="Click here to write your message." autocomplete="off"></textarea>
             <div class="characters">140</div>
         </fieldset>
         <div class="msgbox-sendbutton">
-        <a href="#" onclick="River.Tweet.Send();">SEND</a>
-    </div>
+            <a href="#" onclick="#">SEND</a>
+        </div>
 </div>
 </template>
 
 
+<template name="debug">
+<div>
+{{asJSON}}
+</div>
+</template>
+
 <template name="tweet">
     
-<div id="{{twitter_data.id_str}}" class="tweet">
+<div id="{{twitter_data.id_str}}" class="tweet {{#if embeddedImage}}embedded{{/if}} hidden">
     <div id="content" class="content">
         <img class="avatar" src="{{twitter_data.user.profile_image_url_https}}"/>
         <div class="user">
             {{twitter_data.user.name}} (<a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>)
         </div>
-        <div class="message">
+        <div class="message {{#if isDeleted}}deleted{{/if}}">
             {{{autolinkTwitterMessage}}}
         </div>
     </div>
@@ -79,10 +87,10 @@
         <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
         <abbr class="timeago" title="{{formatTwitterDate}}" data-livestamp="{{formatTwitterTimestamp}}"></abbr>
     </div>
-    {{#if hasEmbeddedImage}}
+    {{#if embeddedImage}}
         <div id="imageEmbedContainer" class="embedContainer">
-	    	<a target="_blank" href="{{twitter_data.entities.media[0].media_url_https}}">
-	    		<img src="{{twitter_data.entities.media[0].media_url_https}}" class="embedImage">
+	    	<a target="_blank" href="{{embeddedImage}}">
+	    		<img src="{{embeddedImage}}" class="embedImage">
 	    	</a>
     	</div>
     {{/if}}
@@ -92,15 +100,15 @@
 
 <template name="retweet">
     
-<div id="{{twitter_data.retweeted_status.id_str}}" class="tweet retweet">
+<div id="{{twitter_data.retweeted_status.id_str}}" class="tweet retweet {{#if embeddedImage}}embedded{{/if}} hidden">
     <div id="content" class="content">
         <img class="avatar" src="{{twitter_data.retweeted_status.user.profile_image_url_https}}"/>
         <img class="retweeter" src="{{twitter_data.user.profile_image_url_https}}"/>
 		<div class="user-retweet">
-			<img src="img/retweet.png"> {{twitter_data.retweeted_status.user.name}} + ' (<a href="https://twitter.com/{{twitter_data.retweeted_status.user.screen_name}}" target="_blank">@{{twitter_data.retweeted_status.user.screen_name}}</a>) by <a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>
+			<img src="img/retweet.png"> {{twitter_data.retweeted_status.user.name}} (<a href="https://twitter.com/{{twitter_data.retweeted_status.user.screen_name}}" target="_blank">@{{twitter_data.retweeted_status.user.screen_name}}</a>) by <a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>
 		</div>
-        <div class="message">
-            {{twitter_data.text}}
+        <div class="message {{#if isDeleted}}deleted{{/if}}">
+            {{{autolinkTwitterMessage}}}
         </div>
     </div>
     <div>
@@ -108,10 +116,10 @@
         <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
         <abbr class="timeago" title="{{formatTwitterDate}}" data-livestamp="{{formatTwitterTimestamp}}"></abbr>
     </div>
-    {{#if hasEmbeddedImage}}
+    {{#if embeddedImage}}
         <div id="imageEmbedContainer" class="embedContainer">
-	    	<a target="_blank" href="{{twitter_data.retweeted_status.entities.media[0].media_url_https}}">
-	    		<img src="{{twitter_data.retweeted_status.entities.media[0].media_url_https}}" class="embedImage">
+	    	<a target="_blank" href="{{embeddedImage}}">
+	    		<img src="{{embeddedImage}}" class="embedImage">
 	    	</a>
     	</div>
     {{/if}}
