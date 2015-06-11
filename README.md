@@ -1,4 +1,4 @@
-# River streaming twitter client
+# River, a streaming twitter client
 river in meteor
 
 A combination of the following repos rewritten in meteor
