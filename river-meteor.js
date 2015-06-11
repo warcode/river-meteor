@@ -91,6 +91,9 @@ if (Meteor.isServer) {
 										},
 										text : element.text,
 										created_at : element.created_at,
+										entities : {
+											urls: element.entities.urls
+										},
 										retweeted_status : (element.retweeted_status ? retweeted_status : null) /* TODO: prune this to only required fields to save space */
 									}
 								});
