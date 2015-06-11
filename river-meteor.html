@@ -79,15 +79,42 @@
         <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
         <abbr class="timeago" title="{{formatTwitterDate}}" data-livestamp="{{formatTwitterTimestamp}}"></abbr>
     </div>
+    {{#if hasEmbeddedImage}}
+        <div id="imageEmbedContainer" class="embedContainer">
+	    	<a target="_blank" href="{{twitter_data.entities.media[0].media_url_https}}">
+	    		<img src="{{twitter_data.entities.media[0].media_url_https}}" class="embedImage">
+	    	</a>
+    	</div>
+    {{/if}}
 </div>
+
 </template>
 
-
-<template name="tweet-with-image">
-  <li>{{text}}</li>
-</template>                    
-
-
 <template name="retweet">
-  <li>{{text}}</li>
+    
+<div id="{{twitter_data.retweeted_status.id_str}}" class="tweet retweet">
+    <div id="content" class="content">
+        <img class="avatar" src="{{twitter_data.retweeted_status.user.profile_image_url_https}}"/>
+        <img class="retweeter" src="{{twitter_data.user.profile_image_url_https}}"/>
+		<div class="user-retweet">
+			<img src="img/retweet.png"> {{twitter_data.retweeted_status.user.name}} + ' (<a href="https://twitter.com/{{twitter_data.retweeted_status.user.screen_name}}" target="_blank">@{{twitter_data.retweeted_status.user.screen_name}}</a>) by <a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>
+		</div>
+        <div class="message">
+            {{twitter_data.text}}
+        </div>
+    </div>
+    <div>
+        <a href="https://twitter.com/{{twitter_data.user.screen_name}}/status/{{twitter_data.id_str}}" target="_blank" class="control open">open</a>
+        <a href="https://twitter.com/intent/tweet?in_reply_to={{twitter_data.id_str}}" class="control reply" target="_blank">reply</a>
+        <abbr class="timeago" title="{{formatTwitterDate}}" data-livestamp="{{formatTwitterTimestamp}}"></abbr>
+    </div>
+    {{#if hasEmbeddedImage}}
+        <div id="imageEmbedContainer" class="embedContainer">
+	    	<a target="_blank" href="{{twitter_data.retweeted_status.entities.media[0].media_url_https}}">
+	    		<img src="{{twitter_data.retweeted_status.entities.media[0].media_url_https}}" class="embedImage">
+	    	</a>
+    	</div>
+    {{/if}}
+</div>
+
 </template>

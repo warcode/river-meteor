@@ -80,6 +80,8 @@ if (Meteor.isServer) {
 							data.forEach(function(element, index, array) {
 								Tweets.insert({
 									river_user: this.userId,
+									isRetweet: (element.retweeted_status ? true : false),
+									hasEmbeddedImage: (element.retweeted_status ? (element.retweeted_status.entities.media && element.retweeted_status.entities.media[0] ? true : false) : (element.entities.media && element.entities.media[0] ? true : false)),
 									twitter_data : {
 										id_str : element.id_str,
 										user : {
@@ -91,7 +93,8 @@ if (Meteor.isServer) {
 										created_at : element.created_at,
 										entities : {
 											urls: element.entities.urls
-										}
+										},
+										retweeted_status : (element.retweeted_status ? retweeted_status : null) /* TODO: prune this to only required fields to save space */
 									}
 								});
 							});
