@@ -25,6 +25,46 @@ if (Meteor.isClient) {
 		}
 	});
 	
+	Template.tweet.onRendered(function () {
+
+	    var element = this.find('.tweet');
+	    var imageEmbed = this.find('.tweet .embedContainer');
+	
+	    //FinishExistingAnimations
+	    //AutoSize
+	
+	    var height = $(element).children('#content').children('.message').height();
+	
+	    //Firefox Workaround
+	    if (height <= 0) {
+	        var ghostElement = $(element).children('#content').children('.message').clone().attr("id", false).css({
+	            visibility: "hidden",
+	            display: "block",
+	            position: "absolute"
+	        });
+	        $("body").append(ghostElement);
+	        height = ghostElement.height();
+	        ghostElement.remove();
+	    }
+	
+	    if (height > 44) {
+	        $(element).css("height", 96 + (height - 44));
+	        $(element).css("min-height", 96 + (height - 44));
+	    }
+	
+	    if (imageEmbed) {
+	        $(element).css("min-height", 370);
+	        $(element).children('div#imageEmbedContainer').children('a').children('img').imagesLoaded(function() {
+	            $(element).children('div#imageEmbedContainer').children('a').children('img').css('margin-top', -(($(element).children('div#imageEmbedContainer').children('a').children('img').height() - 253) / 2));
+	        });
+	
+	    }
+	
+	    //FadeIn
+	    //SetTitle
+	    //ScrollFixed
+	});
+	
 	Template.menubox.events({
       'click .river-login-button' : function() {
         Meteor.loginWithTwitter({ loginStyle: "redirect" });
