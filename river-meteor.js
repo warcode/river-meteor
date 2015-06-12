@@ -207,8 +207,8 @@ if (Meteor.isServer) {
         Timeline : function() {
             var currentUser = Meteor.user()._id;
             
-            if(Meteor.user().services.twitter && Tweets.find({river_user: currentUser}).count() == 0)
-            {
+            if(Meteor.user().services.twitter && Tweets.find({river_user: currentUser}).count() == 0) {
+				
                 twitterClient = new TwitMaker({
                     consumer_key: Meteor.settings.twitter.key,
                     consumer_secret: Meteor.settings.twitter.secret,
@@ -248,9 +248,12 @@ if (Meteor.isServer) {
                             });
                         }                       
                     }
-                }));
-                
-                TwitterStreams[currentUser] = twitterClient.stream('user', { with : 'followings' });
+                }));                
+            }
+            
+            if(Meteor.user().services.twitter && (TwitterStreams[currentUser] === null || 'undefined' === typeof TwitterStreams[currentUser])) {
+				
+				TwitterStreams[currentUser] = twitterClient.stream('user', { with : 'followings' });
 
                 TwitterStreams[currentUser].on('tweet', Meteor.bindEnvironment(function (tweet) {
                     Tweets.insert({
@@ -272,11 +275,12 @@ if (Meteor.isServer) {
                     Tweets.update({river_user: currentUser, twitterId: tid}, {$set: {isDeleted: true}});
                 }));
                 
-            }
-            else
-            {
-                
-            }
+                TwitterStreams[currentUser].on('disconnect', Meteor.bindEnvironment(function (disconnectMessage) {
+                    TwitterStreams[currentUser] = null;
+                }));
+			}
+            
+            
         },
         Send : function(message) {
             twitterClient = new TwitMaker({
