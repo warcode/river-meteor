@@ -157,9 +157,11 @@ if (Meteor.isClient) {
     });
     
     Template.body.events({
-		'click #keyword' : function() {
-			var keyword = 'hots,dota';
+		'click .keyword-button' : function() {
+			console.log('keywords started');
+			var keyword = '#hots,#CSGO,#twitch,#dreamhack';
 			Meteor.call('Keyword', keyword, function(err, response) {
+				console.log('keywords: ' + keyword);
             });
 		}
 	});
@@ -335,16 +337,21 @@ if (Meteor.isServer) {
                     access_token_secret: Meteor.users.findOne({_id:Meteor.userId()}).services.twitter.accessTokenSecret
                 });
 				
-				KeywordStreams[currentUser] = twitterClient.stream('statuses/filter', { track : keyword, language : 'en', filter_level : 'low'  });
+				//filter level can be set it none, low or medium
+				//none is all messages, low and medium lets twitter filter for "message importance" where medium is the strongest filter
+				KeywordStreams[currentUser] = twitterClient.stream('statuses/filter', { track : keyword, language : 'en', filter_level : 'none'  });
 
                 KeywordStreams[currentUser].on('tweet', Meteor.bindEnvironment(function (tweet) {
-                    Tweets.insert({
-                        river_user: currentUser,
-                        twitterId: tweet.id_str,
-                        isDeleted: false,
-                        createdAt: tweet.created_at,
-                        twitter_data : tweet
-                    });
+					//ignore retweets in keyword streams as they are a major source of duplicates
+					if('undefined' === typeof tweet.retweeted_status || tweet.retweeted_status === null) {
+						Tweets.insert({
+							river_user: currentUser,
+							twitterId: tweet.id_str,
+							isDeleted: false,
+							createdAt: tweet.created_at,
+							twitter_data : tweet
+						});
+					}
                     if(Tweets.find({river_user: currentUser}).count() > 300)
                     {
                         var toRemove = Tweets.find({river_user: this.userId}, {sort: [[ "createdAt", "asc" ]]}).first();
@@ -360,6 +367,8 @@ if (Meteor.isServer) {
                 KeywordStreams[currentUser].on('disconnect', Meteor.bindEnvironment(function (disconnectMessage) {
                     KeywordStreams[currentUser] = null;
                 }));
+                
+                return true;
 			}
 		}
     });
