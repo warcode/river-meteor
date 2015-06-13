@@ -16,6 +16,7 @@ div#main {
 
 div#river {
     height: 100%;
+    min-height: 1240px;
 }
 
 .res-768 {
@@ -145,7 +146,7 @@ div#stream {
     margin-right: auto;
     min-width: 1000px;
     width: 1000px;
-    min-height: 1000px;
+    min-height: 1155px;
     position: relative;
     text-align: justify;
     background: #121417;
@@ -193,6 +194,10 @@ div#stream {
 
 .tweet.embedded {
 	min-height: 370px;
+}
+
+.tweet.welcome {
+	min-height: 350px;
 }
 
 .retweet {

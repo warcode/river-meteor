@@ -76,6 +76,16 @@ if (Meteor.isClient) {
         }
     });
 
+    Template.welcome.helpers({
+        formatTwitterDate: function () {
+			var now = new Date();
+            return moment(now).format("ddd MMM DD HH:mm:ss YYYY");
+        },
+        formatTwitterTimestamp: function () {
+			var now = new Date();
+            return moment(now).format("X");
+        }
+	});
 
     Template.tweet.onRendered(function () {
         //Align image horizontally
@@ -205,6 +215,9 @@ if (Meteor.isServer) {
     
     Meteor.methods({
         Timeline : function() {
+			
+			if(Meteor.user() === 'undefined' || Meteor.user() === null) {return;}
+			
             var currentUser = Meteor.user()._id;
             
             if(Meteor.user().services.twitter && Tweets.find({river_user: currentUser}).count() == 0) {
