@@ -155,6 +155,14 @@ if (Meteor.isClient) {
                     //setTitle = function() {};
                 });
     });
+    
+    Template.body.events({
+		'click #keyword' : function() {
+			var keyword = 'hots,dota';
+			Meteor.call('Keyword', keyword, function(err, response) {
+            });
+		}
+	});
 
 
     Template.menubox.events({
@@ -195,6 +203,7 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
     
     TwitterStreams = {};
+    KeywordStreams = {};
     
     Meteor.startup(function () {
         // code to run on server at startup
@@ -304,7 +313,55 @@ if (Meteor.isServer) {
             });
             
             twitterClient.post('statuses/update', { status: message }, function(err, data, response) {});
-        }
+        },
+        Keyword : function(keyword) {
+			
+			if(Meteor.user() === 'undefined' || Meteor.user() === null) {return;}
+			
+            var currentUser = Meteor.user()._id;
+            
+			if(Meteor.user().services.twitter) {
+				
+				if(keyword === '') {
+					KeywordStreams[currentUser].stop();
+					KeywordStreams[currentUser] = null;
+					return;
+				}
+				
+				twitterClient = new TwitMaker({
+                    consumer_key: Meteor.settings.twitter.key,
+                    consumer_secret: Meteor.settings.twitter.secret,
+                    access_token: Meteor.users.findOne({_id:Meteor.userId()}).services.twitter.accessToken,
+                    access_token_secret: Meteor.users.findOne({_id:Meteor.userId()}).services.twitter.accessTokenSecret
+                });
+				
+				KeywordStreams[currentUser] = twitterClient.stream('statuses/filter', { track : keyword, language : 'en', filter_level : 'low'  });
+
+                KeywordStreams[currentUser].on('tweet', Meteor.bindEnvironment(function (tweet) {
+                    Tweets.insert({
+                        river_user: currentUser,
+                        twitterId: tweet.id_str,
+                        isDeleted: false,
+                        createdAt: tweet.created_at,
+                        twitter_data : tweet
+                    });
+                    if(Tweets.find({river_user: currentUser}).count() > 300)
+                    {
+                        var toRemove = Tweets.find({river_user: this.userId}, {sort: [[ "createdAt", "asc" ]]}).first();
+                        Tweets.remove(toRemove._id);
+                    }
+                }));
+                
+                KeywordStreams[currentUser].on('delete', Meteor.bindEnvironment(function (deleteMessage) {
+                    var tid = deleteMessage.delete.status.id_str;
+                    Tweets.update({river_user: currentUser, twitterId: tid}, {$set: {isDeleted: true}});
+                }));
+                
+                KeywordStreams[currentUser].on('disconnect', Meteor.bindEnvironment(function (disconnectMessage) {
+                    KeywordStreams[currentUser] = null;
+                }));
+			}
+		}
     });
 
     Meteor.publish('Tweets', function() {
