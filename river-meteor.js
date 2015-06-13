@@ -159,7 +159,8 @@ if (Meteor.isClient) {
     Template.body.events({
         'click .keyword-button' : function() {
             console.log('keywords started');
-            var keyword = '#hots,#CSGO,#twitch,#dreamhack';
+            //var keyword = '#hots,#CSGO,#twitch,#dreamhack';
+            var keyword = $('.keyword-input').val();
             Meteor.call('Keyword', keyword, function(err, response) {
                 console.log('keywords: ' + keyword);
             });
