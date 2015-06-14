@@ -164,7 +164,12 @@ if (Meteor.isClient) {
             Meteor.call('Keyword', keyword, function(err, response) {
                 console.log('keywords: ' + keyword);
             });
-        }
+        },
+        'click .reset-button' : function() {
+			Meteor.call('Reset', function(err, response) {
+				console.log('reset performed');
+			});
+		}
     });
 
 
@@ -371,7 +376,16 @@ if (Meteor.isServer) {
                         
                         return true;
                     }
-        }
+        },
+        Reset : function() {
+			if(Meteor.user() === 'undefined' || Meteor.user() === null) {return;}
+
+            var currentUser = Meteor.user()._id;
+            
+            Tweets.remove({river_user: currentUser});
+            
+            return true;
+		}
     });
 
     Meteor.publish('Tweets', function() {
