@@ -1,5 +1,4 @@
 # River, a streaming twitter client
-river in meteor
 
 Can be found at https://river.deny.io/
 

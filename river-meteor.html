@@ -119,10 +119,10 @@
     </div>
     {{#if embeddedImage}}
         <div id="imageEmbedContainer" class="embedContainer">
-	    	<a target="_blank" href="{{embeddedImage}}">
-	    		<img src="{{embeddedImage}}" class="embedImage">
-	    	</a>
-    	</div>
+            <a target="_blank" href="{{embeddedImage}}">
+                <img src="{{embeddedImage}}" class="embedImage">
+            </a>
+        </div>
     {{/if}}
 </div>
 
@@ -134,9 +134,9 @@
     <div id="content" class="content">
         <img class="avatar" src="{{twitter_data.retweeted_status.user.profile_image_url_https}}"/>
         <img class="retweeter" src="{{twitter_data.user.profile_image_url_https}}"/>
-		<div class="user-retweet">
-			<img src="img/retweet.png"> {{twitter_data.retweeted_status.user.name}} (<a href="https://twitter.com/{{twitter_data.retweeted_status.user.screen_name}}" target="_blank">@{{twitter_data.retweeted_status.user.screen_name}}</a>) by <a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>
-		</div>
+        <div class="user-retweet">
+            <img src="img/retweet.png"> {{twitter_data.retweeted_status.user.name}} (<a href="https://twitter.com/{{twitter_data.retweeted_status.user.screen_name}}" target="_blank">@{{twitter_data.retweeted_status.user.screen_name}}</a>) by <a href="https://twitter.com/{{twitter_data.user.screen_name}}" target="_blank">@{{twitter_data.user.screen_name}}</a>
+        </div>
         <div class="message {{#if isDeleted}}deleted{{/if}}">
             {{{autolinkTwitterMessage}}}
         </div>
@@ -148,10 +148,10 @@
     </div>
     {{#if embeddedImage}}
         <div id="imageEmbedContainer" class="embedContainer">
-	    	<a target="_blank" href="{{embeddedImage}}">
-	    		<img src="{{embeddedImage}}" class="embedImage">
-	    	</a>
-    	</div>
+            <a target="_blank" href="{{embeddedImage}}">
+                <img src="{{embeddedImage}}" class="embedImage">
+            </a>
+        </div>
     {{/if}}
 </div>
 
