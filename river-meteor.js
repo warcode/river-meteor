@@ -3,9 +3,12 @@ Tweets = new Mongo.Collection("tweets");
 MessageLimit = 300;
 
 if (Meteor.isClient) {
+  UpdateTitleMessage = function(){};
+  UnreadCount = 0;
 
   Meteor.subscribe('Tweets');
   Meteor.subscribe('users');
+  Session.set("RiverTitle", "River");
 
   moment().format();
 
@@ -101,6 +104,9 @@ if (Meteor.isClient) {
   });
 
   Template.tweet.onRendered(function() {
+    //Update title
+    UpdateTitleMessage();
+
     //Align image horizontally
     var imageEmbed = this.find('.tweet .embedContainer a img.embedImage');
     if (imageEmbed) {
@@ -142,31 +148,33 @@ if (Meteor.isClient) {
   });
 
   Template.body.onRendered(function() {
+
     $(window).bind("blur", function() {
+      UpdateTitleMessage = function(){
+        UnreadCount++;
+        var titleString = '('+UnreadCount+') River';
+        Session.set("RiverTitle", titleString);
+      };
       $('.last-unread').removeClass('last-unread');
       var last_unread = $("#stream .tweet:first");
       last_unread.addClass('last-unread');
-      document.title = 'BLUR';
-    /*
-    setTitle = function() {
-        unread++;
-        document.title = '(' + unread + ') River';
-    };
-    */
     });
+
     $(window).bind("focus", function() {
-      //unread = 0;
+      UpdateTitleMessage = function(){};
       var last_unread = $('.last-unread');
       if (last_unread) {
         if (last_unread.offset().top > $(window).height()) {
           $('#last-read-control').show();
         }
       }
-      window.setTimeout(function() {
-        document.title = 'River';
-      }, 160);
-    //setTitle = function() {};
+      Session.set("RiverTitle", "River");
     });
+
+  });
+
+  Deps.autorun(function(){
+    document.title = Session.get("RiverTitle");
   });
 
   Template.body.events({
@@ -322,6 +330,7 @@ if (Meteor.isServer) {
             createdAt: tweet.created_at,
             twitter_data: tweet
           });
+
         }));
 
 
