@@ -309,7 +309,7 @@ if (Meteor.isServer) {
 
       if (Meteor.user().services.twitter && Tweets.find({
           river_user: currentUser,
-          twitter_data: true
+          twitter_data: {$exists : true}
         }).count() == 0) {
 
         twitterClient.get('statuses/home_timeline', {
