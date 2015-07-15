@@ -29,6 +29,12 @@ if (Meteor.isClient) {
         return true;
       }
       return false;
+    },
+    isNotification: function() {
+      if('undefined' !== typeof this.Notification)
+      {
+        return true;
+      }
     }
   });
 
@@ -101,6 +107,33 @@ if (Meteor.isClient) {
       var now = new Date();
       return moment(now).format("X");
     }
+  });
+
+  Template.notification.helpers({
+    formatTwitterDate: function() {
+      var now = new Date();
+      return moment(now).format("ddd MMM DD HH:mm:ss YYYY");
+    },
+    formatTwitterTimestamp: function() {
+      var now = new Date();
+      return moment(now).format("X");
+    }
+  });
+
+  Template.notification.onRendered(function() {
+    //Update title
+    UpdateTitleMessage();
+
+    //fade in latest tweet
+    var element = this.find('.tweet');
+    $('.tweet').finish();
+    $(element).fadeIn();
+
+    //scroll fixed
+    if ($(window).scrollTop() > 98) {
+      $(window).scrollTop($(window).scrollTop() + 98);
+    }
+
   });
 
   Template.tweet.onRendered(function() {
@@ -347,6 +380,11 @@ if (Meteor.isServer) {
         }));
 
         TwitterStreams[currentUser].on('disconnect', Meteor.bindEnvironment(function(disconnectMessage) {
+          Tweets.insert({
+            river_user: currentUser,
+            isDeleted = false,
+            Notification = "You were disconnected from twitter: " + disconnectMessage
+          });
           TwitterStreams[currentUser] = null;
         }));
       }
@@ -440,6 +478,12 @@ if (Meteor.isServer) {
       }
 
       var currentUser = Meteor.user()._id;
+
+      Tweets.insert({
+        river_user: currentUser,
+        isDeleted = false,
+        Notification = "Tweet reset in progress. Reload the page when empty."
+      });
 
       Tweets.remove({
         river_user: currentUser
