@@ -482,6 +482,9 @@ if (Meteor.isServer) {
         river_user: currentUser
       });
 
+      TwitterStreams[currentUser].stop();
+      TwitterStreams[currentUser] = null;
+
       Tweets.insert({
         river_user: currentUser,
         isDeleted: false,
