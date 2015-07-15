@@ -382,8 +382,8 @@ if (Meteor.isServer) {
         TwitterStreams[currentUser].on('disconnect', Meteor.bindEnvironment(function(disconnectMessage) {
           Tweets.insert({
             river_user: currentUser,
-            isDeleted = false,
-            Notification = "You were disconnected from twitter: " + disconnectMessage
+            isDeleted: false,
+            Notification: "You were disconnected from twitter: " + disconnectMessage
           });
           TwitterStreams[currentUser] = null;
         }));
@@ -481,8 +481,8 @@ if (Meteor.isServer) {
 
       Tweets.insert({
         river_user: currentUser,
-        isDeleted = false,
-        Notification = "Tweet reset in progress. Reload the page when empty."
+        isDeleted: false,
+        Notification: "Tweet reset in progress. Reload the page when empty."
       });
 
       Tweets.remove({
