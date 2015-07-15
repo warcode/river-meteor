@@ -293,8 +293,6 @@ if (Meteor.isServer) {
         return;
       }
 
-
-
       var currentUser = Meteor.user()._id;
 
       twitterClient = new TwitMaker({
@@ -310,7 +308,8 @@ if (Meteor.isServer) {
 
 
       if (Meteor.user().services.twitter && Tweets.find({
-          river_user: currentUser
+          river_user: currentUser,
+          Notification: false
         }).count() == 0) {
 
         twitterClient.get('statuses/home_timeline', {
