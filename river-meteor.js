@@ -479,15 +479,17 @@ if (Meteor.isServer) {
 
       var currentUser = Meteor.user()._id;
 
-      Tweets.insert({
-        river_user: currentUser,
-        isDeleted: false,
-        Notification: "Tweet reset in progress. Reload the page when empty."
-      });
-
       Tweets.remove({
         river_user: currentUser
       });
+
+      Tweets.insert({
+        river_user: currentUser,
+        isDeleted: false,
+        Notification: "Tweet purge complete. Restarting stream."
+      });
+
+      Timeline();
 
       return true;
     }
