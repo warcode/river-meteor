@@ -489,7 +489,7 @@ if (Meteor.isServer) {
         Notification: "Tweet purge complete. Restarting stream."
       });
 
-      Timeline();
+      Meteor.call('Timeline', function(err, response) {});
 
       return true;
     }
