@@ -194,6 +194,7 @@ if (Meteor.isClient) {
     });
 
     $(window).bind("focus", function() {
+      UnreadCount = 0;
       UpdateTitleMessage = function(){};
       var last_unread = $('.last-unread');
       if (last_unread) {
